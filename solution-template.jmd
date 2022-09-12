@@ -40,6 +40,21 @@ graphplot(A, names=names, markersize=0.15, markershapes=shapes, markercolor=:whi
 ```
 
 ## Problem 1.2
+Doing a mass balance at the junction with the inflows being the wastewater that underwent treatment and the wastewater
+that didn't undergo treatment yields:
+$C_O V_O + C_T V_T = C_out V_out $
+where the O subscript means "original" inflow, T means "treatment" inflow, and out refers to the outflow.
+The variable to be outputted is $C_out$. 
+In Treatment Method 1, only 20% of the YUK remains in the wastewater that undergoes land disposal, making 
+$C_T = .2 kg/m^3 $. $C_O= 1 kg/m^3$ as described in the problem, but $V_O$ now becomes $100-X_1 m^3/d$.
+$V_out = 100 m^3/d$,since that's the total wastewater flow. Putting it all together, we have the following:
+$C_out = \frac{100-X_1 + .2*X_1}{100}$
+Lastly, $X_1 \leq 100 m^3/d$, and it affects the cost as follows: $C(X_1)= X_1^2 /20$
+
+In Treatment Method 2, $e=1-.005 X_2$ is the percentage of YUK removed from the treatment flow. This leads to
+the following equation:
+$C_out = \frac{100-X_2 + X_2 (1-.005 X_2}{100}$
+Like $X_1$, $X_2 \leq 100 m^3/d$, but $X_2$ does not affect cost (constant rate at 1.5 per $m^3$).
 
 ## Problem 1.3
 
