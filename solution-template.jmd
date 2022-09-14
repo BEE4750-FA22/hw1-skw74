@@ -69,13 +69,27 @@ function Concentration(X_1,X_2)
     #returns concentration of YUK and cost per day as tuple
     #X_1 and X_2 should be in m^3/d
     C_L=.2*C_O #kg/m^3
-    C_C = C_O*(1- .005*X_2)
-    V_O = 100 - X_1 - X_2
+    C_C = C_O*(1- .005*X_2) #kg/m^3
+    V_O = 100 - X_1 - X_2 #m^3/d
     return (C_O*V_O + C_L*X_1 + C_C*X_2)/V_out, (X_1^2 /20)+(1.5*X_2)
 end
 
 ```
 ## Problem 1.4
+```julia 
+using Distributions
+CostVector = zeros(100)
+ConcVector = zeros(100)
+for i in 1:100
+    X1 = rand(0:100)
+    X2 = rand(0:100-X1)
+    cost,conc = Concentration(X1,X2)
+    CostVector[i] = cost
+    ConcVector[i] = conc
+end
+scatter(CostVector,ConcVector)
+
+```
 
 ## Problem 1.5
 
