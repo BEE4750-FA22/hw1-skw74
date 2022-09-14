@@ -49,7 +49,7 @@ C means "chemical treatment" outflow, and "out" refers to the outflow. The varia
 In Treatment Method 1, only 20% of the YUK remains in the wastewater that undergoes land disposal, making 
 $C_T = .2 kg/m^3 $. $C_O= 1 kg/m^3$ as described in the problem, but $V_O$ now becomes $100-X_1-X_2 m^3/d$.
 $V_out = 100 m^3/d$,since that's the total wastewater flow. Also, the cost per day for Method 1 is  $X_1^2 /20$
-In Treatment Method 2, $e=1-.005 X_2$ is the percentage of YUK removed from the treatment flow.
+In Treatment Method 2, $e=1-.005 X_2$ is the percentage of YUK removed from the treatment flow, meaning $.005 X_2$ kg/m^3 remains.
 The cost per day for Method 2 is $C(X_2)=1.5*X_2$.
 
 Putting it all together, we have the following equation:
@@ -69,7 +69,7 @@ function Concentration(X_1,X_2)
     #returns concentration of YUK and cost per day as tuple
     #X_1 and X_2 should be in m^3/d
     C_L=.2*C_O #kg/m^3
-    C_C = C_O*(1- .005*X_2) #kg/m^3
+    C_C = C_O*.005*X_2 #kg/m^3
     V_O = 100 - X_1 - X_2 #m^3/d
     return (C_O*V_O + C_L*X_1 + C_C*X_2)/V_out, (X_1^2 /20)+(1.5*X_2)
 end
@@ -78,20 +78,58 @@ end
 ## Problem 1.4
 ```julia 
 using Distributions
-CostVector = zeros(100)
-ConcVector = zeros(100)
-for i in 1:100
+CostVector = zeros(200)
+ConcVector = zeros(200) 
+XArray = zeros(200,2)
+for i in 1:200
     X1 = rand(0:100)
     X2 = rand(0:100-X1)
-    cost,conc = Concentration(X1,X2)
+    conc,cost = Concentration(X1,X2)
     CostVector[i] = cost
     ConcVector[i] = conc
+    XArray[i,:] .= (X1,X2)
 end
-scatter(CostVector,ConcVector)
-
+scatter(ConcVector,CostVector,xlabel="Concentration (kg/m^3)",ylabel="Cost")
+vline!([.2])
 ```
+I noticed that there's only a handful of combinations of $X_1$ and $X_2$ that lead
+to the desired concentration, and the cost of those combinations vary greatly from
+300 to 500 dollars. Cost also appears to scale exponentially as Concentration goes
+towards zero. Also, the lower the concentration gets, the more the possible cost varies.
+
 
 ## Problem 1.5
+There are several criteria to choose the best treatment plan. One is to pick the 
+lowest cost plan that meets the regulations, while another is to pick the plan that
+minimizes the concentration regardless of cost. Yet another is to choose some
+compromise between cost and concentration removed (as long as it meets the regulations).
+
+I chose to find the corresponding X1 and X2 for the first criteria:
+```julia
+function minCost()
+    #Finds the minimum cost plan that meets the regulations in terms of (X1,X2)
+    meetsRegIndices = findall(x-> x<=0.2,ConcVector)
+    Costs = zeros(length(meetsRegIndices))
+    for i in 1:length(meetsRegIndices)
+        Costs[i] = CostVector[meetsRegIndices[i]]
+    end
+    index = findall(x->x==minimum(Costs),Costs)
+    return XArray[meetsRegIndices[index],:]
+end
+
+```
+So $X_1$ would be `j minCost()[1]` $m^3/d$ and $X_2$ would be `jminCost()[2]` $m^3/d$.
+
+Depending on the stakeholders involved, lower cost or lower YUK concentrations may
+be prioritized. For example, the public might favor safer water conditions. The factory owners
+are likely to desire plans that minimize cost, and so the plan chosen above would be
+most reflective of their interests.
+
+Since my sampling for X1 and X2 were uniform among all possibilities, the vast majority of the results
+had concentrations above the required regulation, giving a small sample size of
+viable plans to choose from. If there was a way to choose samples with a much higher chance of
+meeting the regulations, it's possible that a better solution (in this case, lower cost) 
+may have been found.
 
 ## Problem 1.6
 
