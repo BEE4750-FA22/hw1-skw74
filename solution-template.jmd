@@ -34,6 +34,7 @@ land disposal and chemical treatment respectively.
 Doing a mass balance at the junction with the inflows being the wastewater that underwent treatment and the wastewater
 that didn't undergo treatment yields:
 $C_O V_O + C_L X_1 + C_C X_2 = C_out V_out $
+where $V_out$ is the total flow going into Pristine Brook and $C_out$ is the final concentration to be discharged.
 
 In Treatment Method 1, only 20% of the YUK remains in the wastewater that undergoes land disposal, making 
 $C_T = .2 kg/m^3 $. $C_O= 1 kg/m^3$ as described in the problem, but $V_O$ now becomes $100-X_1-X_2 m^3/d$.
@@ -107,7 +108,7 @@ function minCost()
 end
 
 ```
-So $X_1$ would be `j minCost()[1]` $m^3/d$ and $X_2$ would be `jminCost()[2]` $m^3/d$.
+So $X_1$ would be `j minCost()[1]` $m^3/d$ and $X_2$ would be `j minCost()[2]` $m^3/d$.
 
 Depending on the stakeholders involved, lower cost or lower YUK concentrations may
 be prioritized. For example, the public might favor safer water conditions. The factory owners
@@ -121,9 +122,13 @@ meeting the regulations, it's possible that a better solution (in this case, low
 may have been found.
 
 ## Problem 1.6
-Some things to consider to improve the model include
+One possible way to improve the model is to include uncertainties to the values given in the problem, specifically the flow rate of
+wastewater each day and the initial concentration of YUK. It's certainly possible for the initial flow and concentration 
+to be higher or lower on certain days, which might lead to unnecessary costs and/or not meeting the regulations if not accounted for.
 
-Some assumptions made include 
+One assumption is that the 20 kg/day limit is enough to not cause adverse impacts on the river's ecosystem's health -- it would be helpful to know what
+that standard means and how strict it is. Another assumption is that both methods are equally sustainable, which is yet another factor to consider when
+choosing which treatment plan to value. 
 
 ## Problem 1.7
 
