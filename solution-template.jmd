@@ -22,29 +22,18 @@ Pkg.instantiate()
 # Problem 1
 
 ## Problem 1.1
+![image](diagram.png)
 
-```julia
-using GraphRecipes, Plots
-
-A = [0 1 1 1;
-		 0 0 0 1;
-		 0 0 0 1;
-   	 	 0 0 0 0]
-	
-names = ["Plant", "Land Treatment", "Chem Treatment", "Pristine Brook"]
-shapes=[:hexagon, :rect, :rect, :hexagon]
-xpos = [0, -1, -0.25, 1]
-ypos = [1, 0, 0, -1]
-
-graphplot(A, names=names, markersize=0.15, markershapes=shapes, markercolor=:white, x=xpos, y=ypos)
-```
+To further elaborate on the terms used in the labels, C_O and V_O refer to the concentration of YUK and flow rate of the
+wastewater flow that doesn't undergo any treatment. The concentration of the flows going towards treatment but haven't
+been treated yet also have a concentration of C_O. C_L refers to the concentration of the flow after land disposal, while
+C_C refers to the concentration of the flow after chemical treatment. Lastly, X_1 and X_2 are the flow rates going towards
+land disposal and chemical treatment respectively.
 
 ## Problem 1.2
 Doing a mass balance at the junction with the inflows being the wastewater that underwent treatment and the wastewater
 that didn't undergo treatment yields:
-$C_O V_O + C_L V_L + C_C V_C = C_out V_out $
-where the O subscript means "original" inflow that doesn't undergo treatment, L means "land disposal" inflow, 
-C means "chemical treatment" outflow, and "out" refers to the outflow. The variable to be outputted is $C_out$. 
+$C_O V_O + C_L X_1 + C_C X_2 = C_out V_out $
 
 In Treatment Method 1, only 20% of the YUK remains in the wastewater that undergoes land disposal, making 
 $C_T = .2 kg/m^3 $. $C_O= 1 kg/m^3$ as described in the problem, but $V_O$ now becomes $100-X_1-X_2 m^3/d$.
@@ -132,6 +121,9 @@ meeting the regulations, it's possible that a better solution (in this case, low
 may have been found.
 
 ## Problem 1.6
+Some things to consider to improve the model include
+
+Some assumptions made include 
 
 ## Problem 1.7
 
